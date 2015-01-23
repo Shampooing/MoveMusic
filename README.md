@@ -15,11 +15,7 @@ WHAT IT REQUIRES TO WORK :
 WHAT YOU NEED TO DO :
 The script won't work immediatly, you'll have to edit the file.
 
-First, change the first line so that it contains the path to your python installation. The default value (/usr/bin/python) might work for you, but to be sure run
-
-<b>which python</b>
-
-in a terminal, and paste what you get after the "#!".
+First, change the first line so that it contains the path to your python installation. The default value (/usr/bin/python) might work for you, but to be sure run <b>which python</b> in a terminal, and paste what you get after the "#!".
 
 Second, provide convenient values for the first 3 variables :
   - MUSIC (the extensions you want to find, eg .flac, .mp3, .ogg, etc.)
