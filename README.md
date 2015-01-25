@@ -5,8 +5,8 @@ WHAT IT DOES (short) :
 This script is to be launched by your Transmission client, on completion of a torrent. If the torrent contains music, a symbolic link pointing to the torrent will be created in a specified folder.
 
 WHAT IT DOES (detailed) :
-Suppose your Transmission client just downloaded a torrent <i>torrent</i> in a folder <i>downloads</i>. If there is music in the torrent you downloaded, you want to be able to access it without having to find it among all your other downloads.
-This script does just that : if there are audio files in the folder <i>torrent</i> (ie .flac, .mp3, etc. ; you can change these, see WHAT YOU NEED TO DO), <u>no matter the recursion level</u>, it will create a symbolink link in a specified folder <i>dest</i>, pointing to <i>torrent</i>.
+Suppose your Transmission client just downloaded a torrent *torrent* in a folder *downloads*. If there is music in the torrent you downloaded, you want to be able to access it without having to find it among all your other downloads.
+This script does just that : if there are audio files in the folder *torrent* (ie .flac, .mp3, etc. ; you can change these, see WHAT YOU NEED TO DO), _no matter the recursion level_, it will create a symbolink link in a specified folder *dest*, pointing to *torrent*.
 
 WHAT IT REQUIRES TO WORK :
   Python (not sure about which version ; for python >= 2.6 this shouldn't be a concern. Python3 is probably fine too)
@@ -15,7 +15,7 @@ WHAT IT REQUIRES TO WORK :
 WHAT YOU NEED TO DO :
 The script won't work immediatly, you'll have to edit the file.
 
-First, change the first line so that it contains the path to your python installation. The default value (/usr/bin/python) might work for you, but to be sure run <b>which python</b> in a terminal, and paste what you get after the "#!".
+First, change the first line so that it contains the path to your python installation. The default value (/usr/bin/python) might work for you, but to be sure run **which python** in a terminal, and paste what you get after the "#!".
 
 Second, provide convenient values for the first 3 variables :
   - MUSIC (the extensions you want to find, eg .flac, .mp3, .ogg, etc.)
