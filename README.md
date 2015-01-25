@@ -41,4 +41,9 @@ Second, provide convenient values for the first 3 variables :
   - LOGFILE (a log file to keep track of what happened while using the script)
 
 Third, configure your transmission client to launch the script on completion of
-a torrent. See the Transmission documentation for that.
+a torrent. Edit your transmission-daemon's settings.json file, and
+
+- set "script-torrent-done-enabled" to true;
+- set "script-torrent-done-filename" to the path to the move_music.py script;
+
+See the Transmission documentation for more details.
