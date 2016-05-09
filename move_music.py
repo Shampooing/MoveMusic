@@ -6,7 +6,7 @@ import os
 
 # ---- Please configure the following for your system
 extensions = [".flac", ".mp3"]           # Put here all the extensions you want to match 
-dest_dir = "/home/toto/mydest_dirfolder"         # This is the folder in which the symlinks will be created
+dest_dir = "/home/toto/destination_folder"         # This is the folder in which the symlinks will be created
 log_file = "/home/toto/logs/move_music.log"   # The path to your log file (empty string for no file)
 # ---- You're good to go !
 
@@ -22,7 +22,7 @@ dezst_dir = path(dest_dir)
 # ---- Log operations
 logging.basicConfig(level=logging.INFO,
                     filename=log_file,
-                    format='%(asctime)s :: %(level)s :: %(message)s',
+                    format='%(asctime)s :: %(levelname)s :: %(message)s',
                     datefmt='%Y-%m-%d %H:%M:%S')
 
 
@@ -46,10 +46,13 @@ def music_in_dir(dir):
 
 def main(torrent_name):
     torrent_full_path = source_dir / torrent_name
+    logging.info("Starting...")
+    logging.info("Called for torrent name '{}'.".format(torrent_full_path))
     try:
         # We ignore all torrents that are not directories (who DOES that anyway ?)
         if not torrent_full_path.isdir():
-            logging.warning("Torrent '{}' wasn't a directory. Exiting.")
+            logging.warning("Torrent '{}' wasn't a directory."
+                            .format(torrent_full_path))
             raise SystemExit
         # Now we check for music files in the directory.
         if musicin(ipath):
