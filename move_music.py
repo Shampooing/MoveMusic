@@ -1,72 +1,70 @@
 #!/usr/bin/python
 
-from datetime import datetime
-from os.path import isdir
-from os import symlink, chdir, listdir, environ
+from path import path
+import logging
+import os
 
-############# YOU HAVE TO CHANGE THESE VARIABLES
-
-MUSIC = [".flac", ".mp3"]               # Put here the extensions you want to find 
-
-dest = "/home/toto/mydestfolder"        # This is the folder in which the symlinks will be created
-
-LOGFILE = "/home/toto/move_music.log"   # The path to your log file (it's a mandatory argument for now, remove all the lines containing "log" in this script if you don't want to use it)
-
-######################################
+# ---- Please configure the following for your system
+extensions = [".flac", ".mp3"]           # Put here all the extensions you want to match 
+dest_dir = "/home/toto/mydest_dirfolder"         # This is the folder in which the symlinks will be created
+log_file = "/home/toto/logs/move_music.log"   # The path to your log file (empty string for no file)
+# ---- You're good to go !
 
 
+# ---- Getting environment variables
+TR_TORRENT_NAME = os.environ.get('TR_TORRENT_NAME')
+TR_TORRENT_DIR = os.environ.get('TR_TORRENT_DIR')
 
-# Your job is done.
+
+source_dir = path(TR_TORRENT_DIR)
+dezst_dir = path(dest_dir)
+
+# ---- Log operations
+logging.basicConfig(level=logging.INFO,
+                    filename=log_file,
+                    format='%(asctime)s :: %(level)s :: %(message)s',
+                    datefmt='%Y-%m-%d %H:%M:%S')
 
 
-############# Getting environment variables
-
-TR_TORRENT_NAME = environ.get('TR_TORRENT_NAME')
-TR_TORRENT_DIR = environ.get('TR_TORRENT_DIR')
-
-######################################
-
-TORRENT_DIR = TR_TORRENT_DIR + "/" 
-
-PATH = TORRENT_DIR
-
-chdir(dest)
-
-####### Log operations
-
-log = open(LOGFILE, 'a')
-date = str(datetime.now())
-log.write(date + "\n")
-
-#######
-
-def musicin(dir):
-    for i in listdir(dir):
-        ipath = dir + "/" + i
-        if isdir(ipath):
-            if musicin(ipath)==True:
+def music_in_dir(dir):
+    # We will search recursively for music files in the given directory.
+    for content in dir.listdir():
+        # If the content is a directory, we call 'music_in_dir' on it.
+        if content.isdir():
+            if music_in_dir(content):
                 return True
-        else:
-            for ext in MUSIC:
-                if i.endswith(ext)==True:
-                    log.write("\tFound a " + ext + " file at " + ipath +"\n")
-                    return True
+            continue
+        # At this point, 'content' is a file, so we check wether it has a wanted extension.
+        extension = content.split('.')[-1]
+        if extension in extensions:
+            logging.info("Found file '{}' with wanted extension '{}' in directory '{}'."
+                         .format(content.name, "." + extension, dir))
+            return True
+    # If we get to this point, then we didn't find any music file :(
     return False
 
-def main(i):
-    ipath = PATH + i
-    if isdir(ipath):
-        if musicin(ipath)==True:
-            log.write("\tCreating symlink from " + ipath + " to " + dest + i)
-            symlink(ipath, i)
+
+def main(torrent_name):
+    torrent_full_path = source_dir / torrent_name
+    try:
+        # We ignore all torrents that are not directories (who DOES that anyway ?)
+        if not torrent_full_path.isdir():
+            logging.warning("Torrent '{}' wasn't a directory. Exiting.")
+            raise SystemExit
+        # Now we check for music files in the directory.
+        if musicin(ipath):
+            logging.info("Creating symlink from '{}' to '{}'.".format(torrent_full_path, dest_dir))
+            torrent_full_path.symlink(dest_dir / torrent_name)  
         else:
-            log.write("\tFound no music files in " + ipath + ". Exiting.")
-    else:
-        log.write("\t" + ipath + " wasn't a directory. Exiting.")
-    log.write("\n")
+            logging.info("Found no music files in torrent '{}'.".format(torrent_full_path))
+    except SystemExit:
+        pass
+    except Exception as e:
+        logging.exception(e)
+    finally:
+        logging.info("Exiting.\n")
 
 
-main(TR_TORRENT_NAME)
+if __name__ == '__main__':
+    main(TR_TORRENT_NAME)
 
-log.write("\n")
-log.close()
