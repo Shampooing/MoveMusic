@@ -22,9 +22,9 @@ Just grab the file **move_music.py** and put it somewhere convenient. Configure 
 Usage
 -----
 
-Once you've downloaded the file, change its very first line (**#!/usr/bin/python**)so that it contains the path to your desired python installation. If you don't know it, a good way to find out is to run in a terminal
+Once you've downloaded the file, change its very first line (**#!/usr/bin/python**) so that it contains the path to your desired python installation. If you don't know it, a good way to find out is to run in a terminal
 
-  $ which python
+    $ which python
 
 Then, provide convenient values for the first 3 variables :
 - `extensions` : the extensions you want to find. By default these will be .flac, .mp3, .ogg, etc., but you can put whatever you like ;
