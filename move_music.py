@@ -17,7 +17,7 @@ TR_TORRENT_DIR = os.environ.get('TR_TORRENT_DIR')
 
 
 source_dir = path(TR_TORRENT_DIR)
-dezst_dir = path(dest_dir)
+dest_dir = path(dest_dir)
 
 # ---- Log operations
 logging.basicConfig(level=logging.INFO,
