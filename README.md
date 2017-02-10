@@ -1,69 +1,41 @@
 MoveMusic
 =========
 
-What it does (short):
----------------------
+This script recursively scans a directory for files matching any extension among a given list. If any such files are found, a symbolic link to the directory is created in a _destination directory_.
 
-This script is to be launched by your Transmission client, on completion of a
-torrent. If the torrent contains music, a symbolic link pointing to the torrent
-will be created in a specified folder.
+The default use case consists in calling it on completion of a torrent, with a [Transmission](https://transmissionbt.com/) client. Then, if the folder you just downloaded contains **.flac** files, **.mp3** files, etc. (you can configure these extensions in the script file), a symbolic link will be created to this folder in a given _destination directory_.
+As soon as you download a music torrent, you'll be able to access the directory directly from _destination directory_, without the hassle of browsing all your downloaded torrents and manually search for music files.
 
-What it does (detailed):
-------------------------
+Requirements
+------------
 
-Suppose your Transmission client just downloaded a torrent *torrent* in a folder
-*downloads*. If there is music in the torrent you downloaded, you want to be
-able to access it without having to find it among all your other downloads.
-A neat way to do that would be to have all your music torrents regrouped in a
-dedicated folder ; the only thing being that in the case of torrents, you often
-don't want to move them accross folders (you might still want to share them with
-friends or family, and in that case you often need them to remain in the same place).
-This script does just that : if there are audio files in the folder *torrent*
-(ie .flac, .mp3, etc. ; you can change these, see the "What you need to do
-section"), _no matter the recursion level_, it will create a symbolink link in a
-specified folder *dest*, pointing to *torrent*. Your torrent never left its place
-in your folder *downloads*, but now you can access it directly from *dest*.
-
-What it requires to work:
--------------------------
-
-Update:
-------
-I probably broke the python2-compliance in the latest commit, and now,
-unfortunately, the script relies on _path.py_, which you'll have to install
-separately (**pip install path.py** does the trick).
-However, I didn't bring any new feature (except a proper logging system),
-so if you just want the script to work quickly, I suggest you grab the version
-of the previous commit. Now the code is more readable (and a bit less childish).
-
-
-- Python 3 is recommended and probably required, I didn't check for python2 ;
+- Python 3+ ;
 - the module path.py, that you can install by running **pip install path.py** ;
-- Transmission (not sure about which version either but anything decently recent
-should be fine).
+- Transmission (not sure about which version but anything decently recent
+  should be fine).
+  
+Installation
+------------
 
-What you need to do:
---------------------
+Just grab the file **move_music.py** and put it somewhere convenient. Configure it (see below), make it executable, configure your transmission client, and enjoy!
 
-The script is too simple to work out of the box, you'll have to edit a few lines.
+Usage
+-----
 
-First, change the first line so that it contains the path to your desired python
-installation. The default value (/usr/bin/python) might work for you, but if you
-installed python in a different place (if you have a custom installation for example),
-you will have to change it. A good way to know where is your 'default' python
-interpreter is to run **which python** in a terminal, and paste what you get after
-the "#!".
+Once you've downloaded the file, change its very first line (**#!/usr/bin/python**)so that it contains the path to your desired python installation. If you don't know it, a good way to find out is to run in a terminal
 
-Second, provide convenient values for the first 3 variables :
-  - 'extensions' : the extensions you want to find, eg .flac, .mp3, .ogg, etc. ;
-  - 'dest_dir' : the folder in which you want to place the symbolic links ;
-  - 'log_file' : a log file to keep track of what happened while using the script. If you don't want it, you can set it to an empty string.
+  $ which python
 
-Third, configure your transmission client to launch the script on completion of
-a torrent. Edit your transmission-daemon's settings.json file, and
+Then, provide convenient values for the first 3 variables :
+- `extensions` : the extensions you want to find. By default these will be .flac, .mp3, .ogg, etc., but you can put whatever you like ;
+- `dest_dir` : the _destination folder_, in which the symbolic links should be placed ;
+- (_optional_) `log_file` : a log file to keep track of what happened while using the script. Leave it to an empty  string if you don't want it.
 
-- set "script-torrent-done-enabled" to true;
-- set "script-torrent-done-filename" to the path to the move_music.py script;
+Finally, you need to configure your transmission client to launch the script on completion of
+a torrent. To do this, edit your transmission-daemon's `settings.json` file, and
 
-See the Transmission documentation for more details.
+- set "script-torrent-done-enabled" to `true`;
+- set "script-torrent-done-filename" to the path to the `move_music.py` script;
+
+See the [Transmission documentation](https://github.com/transmission/transmission/wiki/Configuration-Files) for more details.
 
